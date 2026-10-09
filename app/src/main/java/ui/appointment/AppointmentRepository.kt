@@ -1,5 +1,8 @@
-```kotlin
+
 package ui.appointment
+
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 data class Appointment(
     val appointmentId: String = "",
@@ -15,44 +18,126 @@ data class Appointment(
 
 class AppointmentRepository {
 
-    // Danh sách tạm thời trong bộ nhớ.
-    // Sau này sẽ thay bằng dữ liệu từ Cloud Firestore.
-    private val appointments = mutableListOf<Appointment>()
+    private val db = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
 
-    fun getAppointments(): List<Appointment> {
-        return appointments.toList()
+    private val appointmentsCollection
+        get() = db.collection("appointments")
+
+    // Lấy danh sách lịch khám của bệnh nhân đang đăng nhập
+    fun getAppointments(
+        onSuccess: (List<Appointment>) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val uid = auth.currentUser?.uid
+
+        if (uid == null) {
+            onError("Người dùng chưa đăng nhập!")
+            return
+        }
+
+        appointmentsCollection
+            .whereEqualTo("patientId", uid)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val appointments = snapshot.documents.mapNotNull { document ->
+                    document.toObject(Appointment::class.java)
+                        ?.copy(appointmentId = document.id)
+                }
+
+                onSuccess(appointments)
+            }
+            .addOnFailureListener { exception ->
+                onError(
+                    exception.localizedMessage
+                        ?: "Không thể tải danh sách lịch khám!"
+                )
+            }
     }
 
-    fun addAppointment(appointment: Appointment): Boolean {
-        val isDuplicate = appointments.any {
-            it.doctorId == appointment.doctorId &&
-            it.date == appointment.date &&
-            it.startTime == appointment.startTime &&
-            it.status != "CANCELLED"
+    // Thêm lịch khám lên Firestore, đồng thời kiểm tra trùng giờ
+    fun addAppointment(
+        appointment: Appointment,
+        onSuccess: (Boolean) -> Unit,
+        onError: (String) -> Unit
+    ) {
+        val uid = auth.currentUser?.uid
+
+        if (uid == null) {
+            onError("Người dùng chưa đăng nhập!")
+            return
         }
 
-        if (isDuplicate) {
-            return false
-        }
+        val patientId = appointment.patientId.ifBlank { uid }
 
-        appointments.add(appointment)
-        return true
+        appointmentsCollection
+            .whereEqualTo("doctorId", appointment.doctorId)
+            .whereEqualTo("date", appointment.date)
+            .get()
+            .addOnSuccessListener { snapshot ->
+
+                val isDuplicate = snapshot.documents.any { document ->
+                    val existing =
+                        document.toObject(Appointment::class.java)
+
+                    existing != null &&
+                    existing.startTime == appointment.startTime &&
+                    existing.status != "CANCELLED"
+                }
+
+                if (isDuplicate) {
+                    onSuccess(false)
+                    return@addOnSuccessListener
+                }
+
+                val document = appointmentsCollection.document()
+
+                val newAppointment = appointment.copy(
+                    appointmentId = document.id,
+                    patientId = patientId
+                )
+
+                document.set(newAppointment)
+                    .addOnSuccessListener {
+                        onSuccess(true)
+                    }
+                    .addOnFailureListener { exception ->
+                        onError(
+                            exception.localizedMessage
+                                ?: "Không thể lưu lịch khám!"
+                        )
+                    }
+            }
+            .addOnFailureListener { exception ->
+                onError(
+                    exception.localizedMessage
+                        ?: "Không thể kiểm tra lịch khám trùng!"
+                )
+            }
     }
 
-    fun cancelAppointment(appointmentId: String): Boolean {
-        val index = appointments.indexOfFirst {
-            it.appointmentId == appointmentId
+    // Hủy lịch khám trên Firestore
+    fun cancelAppointment(
+        appointmentId: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        if (appointmentId.isBlank()) {
+            onError("Mã lịch khám không hợp lệ!")
+            return
         }
 
-        if (index == -1) {
-            return false
-        }
-
-        appointments[index] = appointments[index].copy(
-            status = "CANCELLED"
-        )
-
-        return true
+        appointmentsCollection
+            .document(appointmentId)
+            .update("status", "CANCELLED")
+            .addOnSuccessListener {
+                onSuccess()
+            }
+            .addOnFailureListener { exception ->
+                onError(
+                    exception.localizedMessage
+                        ?: "Không thể hủy lịch khám!"
+                )
+            }
     }
 }
-```
