@@ -1,8 +1,9 @@
-
+```kotlin
 package ui.appointment
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +27,7 @@ class ConfirmAppointmentActivity : AppCompatActivity() {
 
         val dateText = findViewById<TextView>(R.id.dateText)
         val timeText = findViewById<TextView>(R.id.timeText)
+        val reasonInput = findViewById<EditText>(R.id.reasonInput)
         val confirmButton = findViewById<Button>(R.id.confirmButton)
 
         dateText.text = "Ngày khám: ${selectedDate ?: "Chưa chọn"}"
@@ -35,6 +37,7 @@ class ConfirmAppointmentActivity : AppCompatActivity() {
             val doctor = doctorId
             val date = selectedDate
             val time = selectedTime
+            val reason = reasonInput.text.toString().trim()
 
             if (doctor.isNullOrBlank() ||
                 date.isNullOrBlank() ||
@@ -48,12 +51,31 @@ class ConfirmAppointmentActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (reason.isBlank()) {
+                reasonInput.error = "Bà nhập lý do khám giúp tui nha"
+                reasonInput.requestFocus()
+                return@setOnClickListener
+            }
+
+            val timeParts = time.split(" - ")
+
+            if (timeParts.size != 2) {
+                Toast.makeText(
+                    this,
+                    "Khung giờ khám không hợp lệ!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
             confirmButton.isEnabled = false
 
             val appointment = Appointment(
                 doctorId = doctor,
                 date = date,
-                startTime = time
+                startTime = timeParts[0].trim(),
+                endTime = timeParts[1].trim(),
+                reason = reason
             )
 
             appointmentRepository.addAppointment(
@@ -78,7 +100,6 @@ class ConfirmAppointmentActivity : AppCompatActivity() {
                 },
                 onError = { message ->
                     confirmButton.isEnabled = true
-
                     Toast.makeText(
                         this,
                         message,
@@ -89,3 +110,4 @@ class ConfirmAppointmentActivity : AppCompatActivity() {
         }
     }
 }
+```
