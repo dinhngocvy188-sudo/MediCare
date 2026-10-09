@@ -29,7 +29,25 @@
         android:layout_height="wrap_content"
         android:text="Giờ khám:"
         android:textSize="18sp"
-        android:layout_marginBottom="32dp" />
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lý do khám"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/reasonInput"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:gravity="top|start"
+        android:hint="Nhập lý do khám hoặc triệu chứng..."
+        android:inputType="textMultiLine|textCapSentences"
+        android:padding="12dp"
+        android:layout_marginBottom="24dp" />
 
     <Button
         android:id="@+id/confirmButton"
