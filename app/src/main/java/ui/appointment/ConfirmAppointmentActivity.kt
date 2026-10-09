@@ -1,4 +1,4 @@
-```kotlin
+
 package ui.appointment
 
 import android.os.Bundle
@@ -13,6 +13,8 @@ class ConfirmAppointmentActivity : AppCompatActivity() {
     private var doctorId: String? = null
     private var selectedDate: String? = null
     private var selectedTime: String? = null
+
+    private val appointmentRepository = AppointmentRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,23 +32,60 @@ class ConfirmAppointmentActivity : AppCompatActivity() {
         timeText.text = "Giờ khám: ${selectedTime ?: "Chưa chọn"}"
 
         confirmButton.setOnClickListener {
-            if (doctorId.isNullOrBlank() ||
-                selectedDate.isNullOrBlank() ||
-                selectedTime.isNullOrBlank()
+            val doctor = doctorId
+            val date = selectedDate
+            val time = selectedTime
+
+            if (doctor.isNullOrBlank() ||
+                date.isNullOrBlank() ||
+                time.isNullOrBlank()
             ) {
                 Toast.makeText(
                     this,
                     "Thiếu thông tin lịch khám!",
                     Toast.LENGTH_SHORT
                 ).show()
-            } else {
-                Toast.makeText(
-                    this,
-                    "Thông tin hợp lệ. Bước tiếp theo sẽ lưu lịch khám.",
-                    Toast.LENGTH_LONG
-                ).show()
+                return@setOnClickListener
             }
+
+            confirmButton.isEnabled = false
+
+            val appointment = Appointment(
+                doctorId = doctor,
+                date = date,
+                startTime = time
+            )
+
+            appointmentRepository.addAppointment(
+                appointment = appointment,
+                onSuccess = { success ->
+                    confirmButton.isEnabled = true
+
+                    if (success) {
+                        Toast.makeText(
+                            this,
+                            "Đặt lịch khám thành công!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        finish()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Giờ khám này đã có người đặt!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                },
+                onError = { message ->
+                    confirmButton.isEnabled = true
+
+                    Toast.makeText(
+                        this,
+                        message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            )
         }
     }
 }
-```
