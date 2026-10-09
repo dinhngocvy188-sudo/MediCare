@@ -1,5 +1,7 @@
+```kotlin
 package ui.appointment
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -19,7 +21,9 @@ class SelectTimeActivity : AppCompatActivity() {
         doctorId = intent.getStringExtra("doctorId")
         selectedDate = intent.getStringExtra("selectedDate")
 
-        val timeListView = findViewById<ListView>(R.id.timeListView)
+        val timeListView = findViewById<ListView>(
+            R.id.timeListView
+        )
 
         val timeSlots = arrayOf(
             "08:00 - 08:30",
@@ -44,14 +48,34 @@ class SelectTimeActivity : AppCompatActivity() {
 
         timeListView.adapter = adapter
 
-        timeListView.setOnItemClickListener { _, _, position, _ ->
+        timeListView.setOnItemClickListener {
+                _, _, position, _ ->
+
+            if (doctorId.isNullOrBlank() ||
+                selectedDate.isNullOrBlank()
+            ) {
+                Toast.makeText(
+                    this,
+                    "Thiếu thông tin bác sĩ hoặc ngày khám.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                return@setOnItemClickListener
+            }
+
             val selectedTime = timeSlots[position]
 
-            Toast.makeText(
+            val intent = Intent(
                 this,
-                "Đã chọn giờ: $selectedTime",
-                Toast.LENGTH_SHORT
-            ).show()
+                ConfirmAppointmentActivity::class.java
+            )
+
+            intent.putExtra("doctorId", doctorId)
+            intent.putExtra("selectedDate", selectedDate)
+            intent.putExtra("selectedTime", selectedTime)
+
+            startActivity(intent)
         }
     }
 }
+```
