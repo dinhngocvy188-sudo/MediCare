@@ -1,20 +1,17 @@
 package com.example.medicare.repository
 
+import com.example.medicare.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import model.User
 
 class AuthRepository {
-
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    // Lấy UID của user đang đăng nhập
     fun getCurrentUid(): String? {
         return auth.currentUser?.uid
     }
 
-    // Hàm xử lý đăng nhập bằng Email và Mật khẩu
     fun loginUser(
         email: String,
         password: String,
@@ -30,29 +27,24 @@ class AuthRepository {
             }
     }
 
-    // Lấy thông tin User từ Firestore
-    fun fetchUserData(
-        onSuccess: (User) -> Unit,
-        onError: (String) -> Unit
-    ) {
+    fun logout() {
+        auth.signOut()
+    }
+
+    fun fetchUserData(onSuccess: (User) -> Unit, onError: (String) -> Unit) {
         val uid = getCurrentUid()
         if (uid != null) {
-            db.collection("users").document(uid)
-                .get()
+            db.collection("users").document(uid).get()
                 .addOnSuccessListener { document ->
-                    if (document.exists()) {
-                        val user = document.toObject(User::class.java)
-                        if (user != null) {
-                            onSuccess(user)
-                        } else {
-                            onError("Không thể đọc dữ liệu người dùng!")
-                        }
+                    val user = document.toObject(User::class.java)
+                    if (user != null) {
+                        onSuccess(user)
                     } else {
-                        onError("Không tìm thấy thông tin người dùng trên hệ thống!")
+                        onError("Không tìm thấy dữ liệu người dùng!")
                     }
                 }
                 .addOnFailureListener { exception ->
-                    onError(exception.localizedMessage ?: "Lỗi tải dữ liệu người dùng!")
+                    onError(exception.localizedMessage ?: "Lỗi lấy thông tin người dùng")
                 }
         } else {
             onError("Người dùng chưa đăng nhập!")
