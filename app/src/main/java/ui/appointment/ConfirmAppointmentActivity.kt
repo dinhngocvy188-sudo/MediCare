@@ -1,4 +1,4 @@
-```kotlin
+
 package ui.appointment
 
 import android.os.Bundle
@@ -110,4 +110,4 @@ class ConfirmAppointmentActivity : AppCompatActivity() {
         }
     }
 }
-```
+
