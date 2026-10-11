@@ -1,5 +1,5 @@
 
-package ui.appointment
+package com.example.medicare.ui.appointment
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
