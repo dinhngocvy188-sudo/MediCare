@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">MediCare</string>
+    <string name="doctor_list_title">Danh sách bác sĩ</string>
+    <string name="search_doctor_hint">Tìm tên bác sĩ&#8230;</string>
+    <string name="search_doctor_desc">Tìm kiếm bác sĩ</string>
+    <string name="doctor_image_desc">Ảnh bác sĩ</string>
+    <string name="book_appointment_now">Đặt lịch hẹn ngay</string>
+    <string name="login_title">ĐĂNG NHẬP</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Mật khẩu</string>
+    <string name="login_button">Đăng nhập</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="register_button">Đăng ký tài khoản</string>
+    <string name="welcome_doctor">Xin chào bác sĩ</string>
+    <string name="welcome_user_format">Xin chào, %s</string>
+    <string name="doctor_list_button">Danh sách bác sĩ</string>
+    <string name="logout_button">Đăng xuất</string>
+    <string name="admin_screen_title">MÀN HÌNH QUẢN TRỊ (ADMIN)</string>
+    <string name="patient_screen_title">MÀN HÌNH BỆNH NHÂN (PATIENT)</string>
+    <string name="doctor_screen_title">MÀN HÌNH BÁC SĨ (DOCTOR)</string>
+    <string name="experience_format">Kinh nghiệm: %d năm</string>
+    <string name="specialty_id_format">Chuyên khoa ID: %s</string>
+    <string name="fee_format">Phí khám: %d VNĐ</string>
+    <string name="no_description">Chưa có mô tả</string>
 </resources>

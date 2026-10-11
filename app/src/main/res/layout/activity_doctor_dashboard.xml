@@ -7,10 +7,26 @@
     android:padding="24dp">
 
     <TextView
+        android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MÀN HÌNH BÁC SĨ (DOCTOR)"
+        android:text="@string/welcome_doctor"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnDoctorList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/doctor_list_button"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/logout_button" />
+
 </LinearLayout>

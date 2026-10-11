@@ -14,13 +14,45 @@
 
         <!-- Activity khởi chạy chính -->
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.medicare.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Màn hình đăng nhập -->
+        <activity
+            android:name="com.example.medicare.ui.auth.LoginActivity"
+            android:exported="false" />
+
+        <!-- Màn hình quản trị -->
+        <activity
+            android:name="com.example.medicare.ui.admin.AdminDashboardActivity"
+            android:exported="false" />
+
+        <!-- Màn hình bác sĩ -->
+        <activity
+            android:name="com.example.medicare.ui.doctor.DoctorDashboardActivity"
+            android:exported="false" />
+
+        <!-- Màn hình bệnh nhân -->
+        <activity
+            android:name="com.example.medicare.ui.patient.PatientHomeActivity"
+            android:exported="false" />
+
+        <!-- Danh sách bác sĩ -->
+        <activity
+            android:name="com.example.medicare.ui.doctor.DoctorListActivity"
+            android:exported="false" />
+
+        <!-- Chi tiết bác sĩ -->
+        <activity
+            android:name="com.example.medicare.ui.doctor.DoctorDetailActivity"
+            android:exported="false" />
+
+    </application>
 
         <!-- KHAI BÁO ĐẦY ĐỦ CÁC ACTIVITY NÀY -->
         <activity android:name="ui.auth.LoginActivity" />
