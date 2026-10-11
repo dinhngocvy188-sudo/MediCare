@@ -1,3 +1,4 @@
+
 package com.example.medicare.ui.doctor
 
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medicare.R
 import com.example.medicare.model.Doctor
+import com.example.medicare.ui.appointment.SelectDateActivity
 
 class DoctorDetailActivity : AppCompatActivity() {
 
@@ -26,18 +28,22 @@ class DoctorDetailActivity : AppCompatActivity() {
             Toast.makeText(
                 this,
                 "Không tìm thấy thông tin bác sĩ",
-                Toast.LENGTH_SHORT,
+                Toast.LENGTH_SHORT
             ).show()
             finish()
             return
         }
 
-        findViewById<TextView>(R.id.tvDetailName).text = doctor.displayName
+        findViewById<TextView>(R.id.tvDetailName).text =
+            doctor.displayName
 
-        findViewById<TextView>(R.id.tvDetailSpecialty).text = doctor.displaySpecialty
+        findViewById<TextView>(R.id.tvDetailSpecialty).text =
+            doctor.displaySpecialty
 
         findViewById<TextView>(R.id.tvDetailDescription).text =
-            doctor.description.ifEmpty { getString(R.string.no_description) }
+            doctor.description.ifEmpty {
+                getString(R.string.no_description)
+            }
 
         findViewById<Button>(R.id.btnBookAppointment)
             .setOnClickListener {
@@ -49,7 +55,7 @@ class DoctorDetailActivity : AppCompatActivity() {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra(
                 EXTRA_DOCTOR_DATA,
-                Doctor::class.java,
+                Doctor::class.java
             )
         } else {
             @Suppress("DEPRECATION")
@@ -58,29 +64,25 @@ class DoctorDetailActivity : AppCompatActivity() {
     }
 
     private fun openBookingScreen(doctor: Doctor) {
-        try {
-            val bookingClass = Class.forName(
-                "com.example.medicare.ui.appointment.SelectDateActivity",
-            )
+        val doctorId = doctor.displayId
 
-            val bookingIntent = Intent(this, bookingClass).apply {
-                putExtra("doctorId", doctor.displayId)
-                putExtra("consultationFee", doctor.consultationFee)
-            }
-
-            startActivity(bookingIntent)
-        } catch (_: ClassNotFoundException) {
+        if (doctorId.isBlank()) {
             Toast.makeText(
                 this,
-                "Chức năng đặt lịch chưa được triển khai",
-                Toast.LENGTH_SHORT,
+                "Mã bác sĩ không hợp lệ. Vui lòng thử lại.",
+                Toast.LENGTH_LONG
             ).show()
-        } catch (_: Exception) {
-            Toast.makeText(
-                this,
-                "Không thể mở màn hình đặt lịch",
-                Toast.LENGTH_SHORT,
-            ).show()
+            return
         }
+
+        val bookingIntent = Intent(
+            this,
+            SelectDateActivity::class.java
+        ).apply {
+            putExtra("doctorId", doctorId)
+            putExtra("consultationFee", doctor.consultationFee)
+        }
+
+        startActivity(bookingIntent)
     }
 }
