@@ -1,5 +1,5 @@
 
-package ui.appointment
+package com.example.medicare.ui.appointment
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
