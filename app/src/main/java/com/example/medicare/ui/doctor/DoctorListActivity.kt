@@ -25,11 +25,12 @@ class DoctorListActivity : AppCompatActivity() {
         val rvDoctors = findViewById<RecyclerView>(R.id.rvDoctors)
         val searchView = findViewById<SearchView>(R.id.searchViewDoctor)
 
-        adapter = DoctorAdapter(emptyList()) { doctor ->
-            val intent = Intent(this, DoctorDetailActivity::class.java)
-            intent.putExtra("DOCTOR", doctor)
-            startActivity(intent)
-        }
+      
+    adapter = DoctorAdapter(emptyList()) { doctor ->
+         val intent = Intent(this, DoctorDetailActivity::class.java)
+         intent.putExtra(DoctorDetailActivity.EXTRA_DOCTOR_DATA, doctor)
+         startActivity(intent)
+         }
 
         rvDoctors.layoutManager = LinearLayoutManager(this)
         rvDoctors.adapter = adapter
