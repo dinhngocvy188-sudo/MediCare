@@ -1,5 +1,4 @@
-
-package ui.appointment
+package com.example.medicare.ui.appointment
 
 import android.content.Intent
 import android.os.Bundle
