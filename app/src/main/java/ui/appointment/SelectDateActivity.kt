@@ -1,4 +1,4 @@
-```kotlin
+
 package ui.appointment
 
 import android.content.Intent
@@ -56,4 +56,4 @@ class SelectDateActivity : AppCompatActivity() {
         }
     }
 }
-```
+
