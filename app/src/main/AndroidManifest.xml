@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Cấp quyền Internet cho Firebase -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MediCare">
+
+        <!-- Activity khởi chạy chính -->
+        <activity
+            android:name="com.example.medicare.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Màn hình đăng nhập -->
+        <activity
+            android:name="com.example.medicare.ui.auth.LoginActivity"
+            android:exported="false" />
+
+        <!-- Màn hình quản trị -->
+        <activity
+            android:name="com.example.medicare.ui.admin.AdminDashboardActivity"
+            android:exported="false" />
+
+        <!-- Màn hình bác sĩ -->
+        <activity
+            android:name="com.example.medicare.ui.doctor.DoctorDashboardActivity"
+            android:exported="false" />
+
+        <!-- Màn hình bệnh nhân -->
+        <activity
+            android:name="com.example.medicare.ui.patient.PatientHomeActivity"
+            android:exported="false" />
+
+        <!-- Danh sách bác sĩ -->
+        <activity
+            android:name="com.example.medicare.ui.doctor.DoctorListActivity"
+            android:exported="false" />
+
+        <!-- Chi tiết bác sĩ -->
+        <activity
+            android:name="com.example.medicare.ui.doctor.DoctorDetailActivity"
+            android:exported="false" />
+
+        <!-- Màn hình đặt lịch khám -->
+        <activity
+            android:name="com.example.medicare.ui.appointment.SelectDateActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.medicare.ui.appointment.SelectTimeActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.medicare.ui.appointment.ConfirmAppointmentActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.medicare.ui.appointment.MyAppointmentsActivity"
+            android:exported="false" />
+
+    </application>
+
+</manifest>
