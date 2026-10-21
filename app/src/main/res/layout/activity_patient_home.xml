@@ -4,13 +4,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="#F5F7FA">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="MÀN HÌNH BỆNH NHÂN (PATIENT)"
-        android:textSize="22sp"
+        android:text="MEDICARE"
+        android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black" />
+        android:textColor="#1976D2"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MÀN HÌNH BỆNH NHÂN"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#212121"
+        android:layout_marginBottom="28dp" />
+
+    <Button
+        android:id="@+id/btnPayment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thanh toán dịch vụ"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnNotifications"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thông báo và nhắc lịch"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnConsultationChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chat tư vấn" />
+
 </LinearLayout>

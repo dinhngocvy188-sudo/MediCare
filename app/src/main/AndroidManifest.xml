@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Cấp quyền Internet cho Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -12,7 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MediCare">
 
-        <!-- Activity khởi chạy chính -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -22,13 +20,16 @@
             </intent-filter>
         </activity>
 
-        <!-- KHAI BÁO ĐẦY ĐỦ CÁC ACTIVITY NÀY -->
         <activity android:name="ui.auth.LoginActivity" />
+        <activity android:name=".PaymentActivity" />
         <activity android:name="ui.admin.AdminDashboardActivity" />
         <activity android:name="ui.doctor.DoctorDashboardActivity" />
         <activity
-            android:name=".ui.patient.PatientHomeActivity"
+            android:name="ui.patient.PatientHomeActivity"
             android:exported="true" />
+        <activity
+            android:name="ui.patient.NotificationsActivity"
+            android:exported="false" />
 
     </application>
 </manifest>

@@ -13,7 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="MediCare">
+      <SelectionState runConfigName="PatientHomeActivity">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2026-10-06T07:16:13.722781Z">
           <Target type="DEFAULT_BOOT">
@@ -24,7 +24,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="PatientHomeActivity">
+      <SelectionState runConfigName="NotificationsActivity">
         <option name="selectionMode" value="DROPDOWN" />
         <DropdownSelection timestamp="2026-10-06T07:16:13.722781Z">
           <Target type="DEFAULT_BOOT">
