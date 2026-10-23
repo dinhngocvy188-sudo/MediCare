@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Cấp quyền Internet cho Firebase -->
+    <!-- Cap quyen Internet cho Firebase -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -12,7 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MediCare">
 
-        <!-- Activity khởi chạy chính -->
+        <activity
+            android:name="ui.admin.AdminDataActivity"
+            android:exported="false" />
+
+        <!-- Man hinh dang ky -->
+        <activity
+            android:name="ui.auth.RegisterActivity"
+            android:exported="false" />
+
+        <!-- Man hinh chinh -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -22,13 +31,38 @@
             </intent-filter>
         </activity>
 
-        <!-- KHAI BÁO ĐẦY ĐỦ CÁC ACTIVITY NÀY -->
-        <activity android:name="ui.auth.LoginActivity" />
-        <activity android:name="ui.admin.AdminDashboardActivity" />
-        <activity android:name="ui.doctor.DoctorDashboardActivity" />
         <activity
-            android:name=".ui.patient.PatientHomeActivity"
-            android:exported="true" />
+            android:name="ui.admin.DoctorVerificationActivity"
+            android:exported="false" />
+        <!-- Man hinh dang nhap -->
+        <activity
+            android:name="ui.auth.LoginActivity"
+            android:exported="false" />
+
+        <!-- Man hinh quan tri -->
+        <activity
+            android:name="ui.admin.AdminDashboardActivity"
+            android:exported="false" />
+
+        <!-- Man hinh bac si -->
+        <activity
+            android:name="ui.doctor.DoctorDashboardActivity"
+            android:exported="false" />
+
+        <!-- Man hinh benh nhan -->
+        <activity
+            android:name="ui.patient.PatientHomeActivity"
+            android:exported="false" />
+
+        <!-- Man hinh dat lich kham -->
+        <activity
+            android:name="ui.patient.BookingActivity"
+            android:exported="false" />
+
+        <!-- Man hinh lich kham cua toi -->
+        <activity
+            android:name="ui.patient.PatientAppointmentsActivity"
+            android:exported="false" />
 
     </application>
 </manifest>

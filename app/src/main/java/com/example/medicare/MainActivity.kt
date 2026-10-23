@@ -14,138 +14,63 @@ import ui.patient.PatientHomeActivity
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var firestore: FirebaseFirestore
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
+        val auth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
 
-        checkUserRoleAndNavigate()
-    }
-
-    private fun checkUserRoleAndNavigate() {
-
-        val currentUser = auth.currentUser
-
-        if (currentUser == null) {
-            navigateToActivity(LoginActivity::class.java)
+        if (user == null) {
+            openPage(LoginActivity::class.java)
             return
         }
 
-        val uid = currentUser.uid
-
-        Log.d("MainActivity", "Current UID: $uid")
-
-        firestore.collection("users")
-            .document(uid)
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(user.uid)
             .get()
             .addOnSuccessListener { document ->
+                if (isFinishing || isDestroyed) return@addOnSuccessListener
 
-                if (document.exists()) {
+                val role = document.getString("role")
+                    ?.trim()
+                    ?.lowercase()
 
-                    val role = document.getString("role")
+                Log.d("MainActivity", "Role = $role")
 
-                    Log.d(
-                        "MainActivity",
-                        "User role: $role"
-                    )
+                val target = when (role) {
+                    "admin" -> AdminDashboardActivity::class.java
+                    "doctor" -> DoctorDashboardActivity::class.java
+                    "patient" -> PatientHomeActivity::class.java
+                    else -> null
+                }
 
-                    when (role?.lowercase()) {
-
-                        "admin" -> {
-                            navigateToActivity(
-                                AdminDashboardActivity::class.java
-                            )
-                        }
-
-                        "doctor" -> {
-                            navigateToActivity(
-                                DoctorDashboardActivity::class.java
-                            )
-                        }
-
-                        "patient" -> {
-                            navigateToActivity(
-                                PatientHomeActivity::class.java
-                            )
-                        }
-
-                        else -> {
-                            Toast.makeText(
-                                this,
-                                "Tài khoản chưa được phân quyền!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-
-                            navigateToActivity(
-                                LoginActivity::class.java
-                            )
-                        }
-                    }
-
+                if (target != null) {
+                    openPage(target)
                 } else {
-
-                    Log.e(
-                        "MainActivity",
-                        "Không tìm thấy user với UID: $uid"
-                    )
-
                     Toast.makeText(
                         this,
-                        "Không tìm thấy thông tin tài khoản!",
+                        "Không tìm thấy vai trò tài khoản. Kiểm tra dữ liệu users trong Firestore.",
                         Toast.LENGTH_LONG
                     ).show()
-
-                    navigateToActivity(
-                        LoginActivity::class.java
-                    )
+                    auth.signOut()
+                    openPage(LoginActivity::class.java)
                 }
             }
-            .addOnFailureListener { exception ->
-
-                Log.e(
-                    "MainActivity",
-                    "Lỗi Firestore",
-                    exception
-                )
-
+            .addOnFailureListener { error ->
+                Log.e("MainActivity", "Firestore error", error)
                 Toast.makeText(
                     this,
-                    "Không thể kết nối Firestore: ${exception.message}",
+                    "Không tải được thông tin tài khoản: ${error.localizedMessage}",
                     Toast.LENGTH_LONG
                 ).show()
+                auth.signOut()
+                openPage(LoginActivity::class.java)
             }
     }
 
-    private fun navigateToActivity(
-        targetActivity: Class<*>
-    ) {
-        try {
-
-            val intent = Intent(
-                this,
-                targetActivity
-            )
-
-            startActivity(intent)
-            finish()
-
-        } catch (e: Exception) {
-
-            Log.e(
-                "MainActivity",
-                "Không thể mở Activity: ${targetActivity.simpleName}",
-                e
-            )
-
-            Toast.makeText(
-                this,
-                "Lỗi mở màn hình: ${e.localizedMessage}",
-                Toast.LENGTH_LONG
-            ).show()
-        }
+    private fun openPage(activity: Class<*>) {
+        startActivity(Intent(this, activity))
+        finish()
     }
 }

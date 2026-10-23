@@ -1,9 +1,11 @@
+
 package ui.auth
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.medicare.MainActivity
@@ -11,27 +13,33 @@ import com.example.medicare.R
 import com.example.medicare.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 
-
 class LoginActivity : AppCompatActivity() {
 
-    private val authRepository by lazy { AuthRepository() }
+    private val authRepository by lazy {
+        AuthRepository()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // Lấy các thành phần giao diện
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
         val btnForgotPassword = findViewById<Button>(R.id.btnForgotPassword)
+        val tvGoToRegister = findViewById<TextView>(R.id.tvGoToRegister)
 
-        // =========================
+        // ĐĂNG KÝ
+        tvGoToRegister.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
         // ĐĂNG NHẬP
-        // =========================
         btnLogin.setOnClickListener {
-
             val email = etEmail.text.toString().trim()
-            val password = etPassword.text.toString().trim()
+            val password = etPassword.text.toString()
 
             if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(
@@ -39,14 +47,12 @@ class LoginActivity : AppCompatActivity() {
                     "Vui lòng nhập đầy đủ Email và Mật khẩu",
                     Toast.LENGTH_SHORT
                 ).show()
-
                 return@setOnClickListener
             }
 
             authRepository.loginUser(
                 email,
                 password,
-
                 onSuccess = {
                     Toast.makeText(
                         this,
@@ -54,15 +60,10 @@ class LoginActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    val intent = Intent(
-                        this,
-                        MainActivity::class.java
-                    )
-
+                    val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                     finish()
                 },
-
                 onError = { errorMessage ->
                     Toast.makeText(
                         this,
@@ -73,11 +74,8 @@ class LoginActivity : AppCompatActivity() {
             )
         }
 
-        // =========================
         // QUÊN MẬT KHẨU
-        // =========================
         btnForgotPassword.setOnClickListener {
-
             val email = etEmail.text.toString().trim()
 
             if (email.isEmpty()) {
@@ -86,14 +84,12 @@ class LoginActivity : AppCompatActivity() {
                     "Vui lòng nhập Email trước",
                     Toast.LENGTH_SHORT
                 ).show()
-
                 return@setOnClickListener
             }
 
             FirebaseAuth.getInstance()
                 .sendPasswordResetEmail(email)
                 .addOnSuccessListener {
-
                     Toast.makeText(
                         this,
                         "Đã gửi email đặt lại mật khẩu. Vui lòng kiểm tra hộp thư!",
@@ -101,7 +97,6 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                 }
                 .addOnFailureListener { exception ->
-
                     Toast.makeText(
                         this,
                         "Không thể gửi email: ${exception.message}",
